@@ -1,4 +1,5 @@
 *.log
 *.pot
 *.pyc
+*.cvs
 local_settings.py
