@@ -1,4 +1,4 @@
 ews
 ===
 
-Early Warning System web app.
+Early Warning System django project.
