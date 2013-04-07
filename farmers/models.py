@@ -1,7 +1,7 @@
 from django.db import models
 
 class Farmer(models.Model):
-    phone_number = models.BigIntegerField(primary_key=True,max_length=8)
+    phone_number = models.BigIntegerField(primary_key=True,max_length=10)
     first_name = models.CharField(max_length=200)
     last_name = models.CharField(max_length=200)
     address = models.CharField(max_length=200)
