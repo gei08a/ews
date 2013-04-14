@@ -55,7 +55,7 @@ class Session:
         return self.__xml_to_dictionary(response)
 
 
-    def simple_sms_send(self, phone_number, message):
+    def send_sms(self, phone_number, message):
         data = {"PhoneNumber": phone_number,
                 "LicenseKey": self.__license_key,
                 "Message": message}
