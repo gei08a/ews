@@ -48,3 +48,17 @@ class Subscription(models.Model):
 
     def __unicode__(self):
         return str(self.phone_number)
+
+class SMS(models.Model):
+    phone_number = models.ForeignKey(Farmer)
+    message = models.CharField(max_length=200)
+    posttime = models.DateTimeField()
+    cdyne_posttime = models.CharField(max_length=200)
+    cdyne_sms_id = models.CharField(max_length=200)
+    cancelled = models.CharField(max_length=200)
+    error = models.CharField(max_length=200)
+    queued = models.CharField(max_length=200)
+    sent = models.CharField(max_length=200)
+
+    def __unicode__(self):
+        return (self.phone_number + ' ' + self.last_name)
