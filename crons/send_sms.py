@@ -1,14 +1,35 @@
 #!/usr/bin/env python
 import csv
 import datetime
+import MySQLdb
 import os
 import sys
 import syslog
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ews.settings")
 
-from farmers.models import Farmer, Market, Quote, Subscription
+from django.db import connection
+from django.utils import timezone
+from farmers.models import Farmer, Market, Quote
+from farmers.models import SMS, Subscription
 from session import Session
+
+def dictfetch(cursor):
+    "Returns all rows from a cursor as a dict"
+    desc = cursor.description
+    return [
+        dict(zip([col[0] for col in desc], row))
+        for row in cursor.fetchall()
+    ]
+
+def get_license_key():
+    cursor = connection.cursor()
+
+    cursor.execute("SELECT * FROM cdyne_config WHERE id = 1",)
+    row = dictfetch(cursor)
+#    row = cursor.fetchone()
+
+    return row[0]['license_key']
 
 if __name__ == "__main__":
 
@@ -39,8 +60,8 @@ if __name__ == "__main__":
             quotes[market_id] = {}
         quotes[market_id][item.crop_id] = str(item.price)
 
-    license_key = ''
-    sms = Session(license_key)
+    license_key = get_license_key()
+    session = Session(license_key)
 
     for phone_number in farmers:
         s = Subscription.objects.select_related().filter(phone_number_id=phone_number).order_by('market')
@@ -57,6 +78,18 @@ if __name__ == "__main__":
         substrings_list.append(substring[:-1])
         message = '/'.join(substrings_list)
         try:
-            sms.simple_sms_send(phone_number, message)
+            response = session.send_sms(phone_number, message)
+            if not response['Queued']:
+                syslog.syslog('Error - Failed to send message to %s. - %s' % (phone_number,response['SMSError']))
+            sms = SMS(phone_number = Farmer.objects.get(phone_number=phone_number),
+                      message = message,
+                      posttime = timezone.now(),
+                      cdyne_posttime = response['SentDateTime'],
+                      cdyne_sms_id = response['MessageID'],
+                      cancelled = response['Cancelled'],
+                      error = response['SMSError'],
+                      queued = response['Queued'],
+                      sent = response['Sent'])
+            sms.save()
         except Exception, e:
             syslog.syslog(str(e))
