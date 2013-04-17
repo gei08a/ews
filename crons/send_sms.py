@@ -25,9 +25,8 @@ def dictfetch(cursor):
 def get_license_key():
     cursor = connection.cursor()
 
-    cursor.execute("SELECT * FROM cdyne_config WHERE id = 1",)
+    cursor.execute("SELECT * FROM cdyne_config WHERE id = 1")
     row = dictfetch(cursor)
-#    row = cursor.fetchone()
 
     return row[0]['license_key']
 
