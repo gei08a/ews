@@ -1,7 +1,4 @@
 #!/usr/bin/env python
-import csv
-import datetime
-import MySQLdb
 import os
 import sys
 import syslog
@@ -44,10 +41,7 @@ if __name__ == "__main__":
     for item in f:
         farmers.append(item.phone_number)
 
-    today = datetime.date.today()
-
-#    q = Quote.objects.filter(date=str(today)).order_by('market')
-    q = Quote.objects.filter(date='2013-03-30').order_by('market')
+    q = Quote.objects.filter(date=timezone.now().strftime('%Y-%m-%d')).order_by('market')
     if not q:
         sys.exit()
     quotes = {}
