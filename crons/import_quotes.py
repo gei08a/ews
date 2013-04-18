@@ -3,11 +3,12 @@ import csv
 import datetime
 import os
 
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ews.settings")
+
 from django.utils import timezone
 from farmers.models import Crop, Market, Quote
 
 if __name__ == "__main__":
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ews.settings")
     with open('quotes.csv', 'rb') as csvfile:
         spamreader = csv.reader(csvfile, delimiter=' ', quotechar='|')
         for row in spamreader:
