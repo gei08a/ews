@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block head_title %}Quotes{% endblock %}
+{% block content %}
+<h1>Quotes for {{ date }}</h1>
+<table style="border:solid;margin:auto">
+    <tr>
+        {% for market, crops in quote_list.items %}
+            <td>
+                <table style="border:solid">
+                    <tr>
+                        <td style="text-align:center;padding:10px;border:solid">
+                            <h2>{{market}}</h2>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:center;padding:10px">
+                            {% for crop, price in crops.items %}
+                                <p>{{ crop }} - L.{{ price }}</p>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        {% endfor %}
+    </tr>
+</table>
+{% endblock %}

@@ -8,6 +8,8 @@ urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'ews.views.home', name='home'),
     # url(r'^ews/', include('ews.foo.urls')),
+    url(r'^quote/$', 'farmers.views.quotes_index'),
+    url(r'^sms_send/$', 'farmers.views.sms_send'),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),

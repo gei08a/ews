@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block head_title %}Send SMS{% endblock %}
+{% block content %}
+<h1>Send SMS</h1>
+{% if info %}
+<p>{{ info }}</p>
+    {% if message %}
+    <p>Message: {{ message }}</p>
+    {% endif %}
+{% endif %}
+<form action="/sms_send/" method="post">{% csrf_token %}
+<p><label for="phone_number">Phone Number:</label>
+    <input id="phone_number" type="text" name="phone_number" maxlength="10" />
+    <input type="submit" value="Submit" /></p>
+</form>
+{% endblock %}
