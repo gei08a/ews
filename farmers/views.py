@@ -107,19 +107,19 @@ def send_sms(phone_number):
         return False
 
     try:
-#        response = session.send_sms(phone_number, message)
-#        if not response['Queued']:
-#            syslog.syslog('Error - Failed to send message to %s. - %s' % (phone_number,response['SMSError']))
-#        sms = SMS(phone_number = Farmer.objects.get(phone_number=phone_number),
-#                  message = message,
-#                  posttime = timezone.now(),
-#                  cdyne_posttime = response['SentDateTime'],
-#                  cdyne_sms_id = response['MessageID'],
-#                  cancelled = response['Cancelled'],
-#                  error = response['SMSError'],
-#                  queued = response['Queued'],
-#                  sent = response['Sent'])
-#        sms.save()
+        response = session.send_sms(phone_number, message)
+        if not response['Queued']:
+            syslog.syslog('Error - Failed to send message to %s. - %s' % (phone_number,response['SMSError']))
+        sms = SMS(phone_number = Farmer.objects.get(phone_number=phone_number),
+                  message = message,
+                  posttime = timezone.now(),
+                  cdyne_posttime = response['SentDateTime'],
+                  cdyne_sms_id = response['MessageID'],
+                  cancelled = response['Cancelled'],
+                  error = response['SMSError'],
+                  queued = response['Queued'],
+                  sent = response['Sent'])
+        sms.save()
         return message
     except Exception, e:
         syslog.syslog(str(e))
